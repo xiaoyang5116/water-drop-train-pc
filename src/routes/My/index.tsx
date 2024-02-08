@@ -12,8 +12,7 @@ import {
 import { useMutation } from '@apollo/client';
 import OSSImageUpload from '../../components/OSSImageUpload';
 import { UPDATE_USER } from '../../graphql/user';
-import { useUserInfo } from '../../context/UserInfo';
-// import { useUser } from '../../hooks/useUser';
+import { useUserStore } from '../../stores/user.store';
 
 export interface IUpdateUserInfoFromFields {
   tel: string;
@@ -27,10 +26,8 @@ export interface IUpdateUserInfoFromFields {
 const My = () => {
   const { message } = App.useApp();
   const formRef = useRef<ProFormInstance>();
-  const { userInfo, refetch } = useUserInfo();
-  // const { userInfo, refetch } = useUser();
+  const userInfo = useUserStore.use.userInfo();
   const [updateUserInfo] = useMutation(UPDATE_USER);
-  console.log('My-->');
 
   useEffect(() => {
     if (!userInfo.tel) return;
@@ -70,8 +67,9 @@ const My = () => {
 
           if (res.data.updateUserInfo.code === 200) {
             message.success('更新成功');
-            refetch();
-            // userInfo.refetchHandler();
+
+            userInfo.refetch();
+
             return;
           }
 

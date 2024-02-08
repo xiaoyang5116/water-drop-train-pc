@@ -1,17 +1,18 @@
 import { Route, Routes } from 'react-router-dom';
-// import { Spin } from 'antd';
+import { Spin } from 'antd';
 import Login from './routes/Login';
 import Layout from './components/Layout';
 import { routes } from './routes/menus';
 import { ROUTE_COMPONENT } from './routes';
-// import { useUser } from './hooks/useUser';
-import { UserInfoProvider } from './context/UserInfo';
+import { useUserInfo } from './hooks/useUser';
 
 import './App.less';
 
 function App() {
+  const { loading } = useUserInfo();
+
   return (
-    <UserInfoProvider>
+    <Spin spinning={loading}>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Layout />}>
@@ -23,7 +24,7 @@ function App() {
           })}
         </Route>
       </Routes>
-    </UserInfoProvider>
+    </Spin>
   );
 }
 

@@ -1,13 +1,10 @@
 import { MenuDataItem, ProLayout } from '@ant-design/pro-components';
-import {
-  Link, useNavigate, useOutlet,
-} from 'react-router-dom';
+import { Link, useNavigate, useOutlet } from 'react-router-dom';
 import { Dropdown } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import { routes } from '../../routes/menus';
 import { AUTH_TOKEN } from '../../utils/constants';
-// import { useUser } from '../../hooks/useUser';
-import { useUserInfo } from '../../context/UserInfo';
+import { useUserStore } from '../../stores/user.store';
 
 const menuItemRender = (item: MenuDataItem, dom: React.ReactNode) => (
   <Link to={item.path || '/'}>{dom}</Link>
@@ -18,17 +15,13 @@ const menuItemRender = (item: MenuDataItem, dom: React.ReactNode) => (
  */
 const Layout = () => {
   const outlet = useOutlet();
-  const { userInfo } = useUserInfo();
-  // const { userInfo } = useUser();
+  const userInfo = useUserStore.use.userInfo();
   const nav = useNavigate();
-
-  console.log('Layout');
 
   return (
     <ProLayout
       title="水滴培训"
       layout="mix"
-      // siderWidth={130}
       avatarProps={{
         src:
           userInfo.avatar

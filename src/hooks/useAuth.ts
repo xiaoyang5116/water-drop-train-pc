@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { LOGIN, SEND_SMS_CODE } from '../graphql/auth';
 import { ResultDateType, ResultType } from '../utils/type';
 import { AUTH_TOKEN } from '../utils/constants';
-import { useUserInfo } from '../context/UserInfo';
+import { useUserStore } from '../stores/user.store';
 
 interface ILoginFields {
   tel: string;
@@ -16,7 +16,7 @@ export const useAuth = () => {
   const { message } = App.useApp();
   const [params] = useSearchParams();
   const nav = useNavigate();
-  const { refetch } = useUserInfo();
+  const userInfo = useUserStore.use.userInfo();
 
   const [sendSmsCode] = useMutation<{ sendSmsCode: ResultType }>(SEND_SMS_CODE);
   const [login] = useMutation<{ login: ResultDateType<string> }>(LOGIN);
@@ -41,7 +41,7 @@ export const useAuth = () => {
     });
 
     if (res.data?.login.code === 200) {
-      refetch();
+      userInfo.refetch();
       if (value.autoLogin) {
         sessionStorage.setItem(AUTH_TOKEN, '');
         localStorage.setItem(AUTH_TOKEN, res.data.login.data);
